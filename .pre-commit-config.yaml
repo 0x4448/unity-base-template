@@ -1,11 +1,8 @@
 repos:
--   repo: local
+-   repo: https://github.com/0x4448/pre-commit-hooks
+    rev: v0.0.7
     hooks:
-    -   id: dotnet-format
-        name: dotnet format (.NET 6 SDK)
-        language: system
-        # Change the solution path if using this project as a template
-        entry: dotnet format unity-base-template.sln --verify-no-changes --severity info --include
+    -   id: dotnet-format-whitespace
 
 -   repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v4.3.0
