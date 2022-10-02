@@ -244,6 +244,9 @@ dotnet_naming_style.pascal_case.capitalization = pascal_case
 
 ### Code Style Rules ###
 
+# Remove unnecessary using directives
+dotnet_diagnostic.IDE0005.severity = warning
+
 # Suggest using var
 dotnet_diagnostic.IDE0007.severity = suggestion
 
@@ -256,7 +259,16 @@ dotnet_diagnostic.IDE0036.severity = warning
 # Add accessibility modifiers
 dotnet_diagnostic.IDE0040.severity = warning
 
-# Remove unnecessary value assignment 
+# Add readonly modifier
+dotnet_diagnostic.IDE0044.severity = suggestion
+
+# Remove unused private member
+dotnet_diagnostic.IDE0051.severity = warning
+
+# Remove unread private member
+dotnet_diagnostic.IDE0052.severity = warning
+
+# Remove unnecessary value assignment
 dotnet_diagnostic.IDE0059.severity = warning
 
 # Remove unused parameter
