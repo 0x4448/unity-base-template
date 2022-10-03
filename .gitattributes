@@ -12,8 +12,10 @@
 *.cs eol=crlf
 
 # Files with LF line endings
+*.cginc eol=lf
 *.json eol=lf
 *.inputactions eol=lf
+*.shader eol=lf
 *.txt eol=lf
 *.vsconfig eol=lf
 
