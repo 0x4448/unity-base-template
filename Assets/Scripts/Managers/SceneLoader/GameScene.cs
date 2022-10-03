@@ -7,4 +7,5 @@ public enum GameScene
     Startup,
     PersistentManagers,
     Intro,
+    Title,
 }
