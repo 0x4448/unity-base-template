@@ -30,7 +30,7 @@ public class SceneLoader : MonoBehaviour
     /// <inheritdoc cref="GameSceneEventChannel.Raise(GameObject, GameScene)"/>
     private void LoadScene(GameObject sender, GameScene newScene)
     {
-        var loadOperation = SceneManager.LoadSceneAsync((int)newScene);
+        var loadOperation = SceneManager.LoadSceneAsync((int)newScene, LoadSceneMode.Additive);
         _loadOperations.Add(loadOperation, newScene);
         loadOperation.completed += UnloadOldScenes;
     }
