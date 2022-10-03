@@ -10,7 +10,7 @@ public class SceneLoader : MonoBehaviour
     [SerializeField]
     private GameSceneEventChannel _unloadSceneEvent;
 
-    private Dictionary<AsyncOperation, GameScene> _loadOperations;
+    private readonly Dictionary<AsyncOperation, GameScene> _loadOperations = new();
 
     private void OnEnable()
     {
