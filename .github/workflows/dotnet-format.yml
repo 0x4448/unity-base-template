@@ -9,4 +9,4 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-        run: dotnet format format.csproj --verify-no-changes
+      - run: dotnet format format.csproj --verify-no-changes
