@@ -8,7 +8,7 @@ A base template for making Unity games.
 ```
 #!/bin/sh
 
-solution=$(find . -maxdepth 1 -name '*.sln' -type f | head -1)
+solution=$(find . -maxdepth 1 -name "*.sln" -type f | head -1)
 changed=$(git diff --cached --diff-filter=ACM --name-only -z "*.cs" | xargs -0)
 if [[ -n "$changed" ]]; then
   dotnet format "$solution" --verify-no-changes --include $changed
