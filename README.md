@@ -3,8 +3,8 @@ A base template for making Unity games.
 
 ## Local repository setup
 1. Install the [.NET 6.0 SDK](https://dotnet.microsoft.com/en-us/download/visual-studio-sdks) or newer.
-2. `cd` into your local repo and run `git lfs install` to setup [Git LFS](https://git-lfs.github.com).
-3. Add these lines to your pre-commit git hook (`.git/hooks/pre-commit`):
+2. Install [Git LFS](https://git-lfs.github.com) and run `git lfs install` to initialize it.
+3. Add these lines to your [pre-commit git hook](https://git-scm.com/book/en/v2/Customizing-Git-Git-Hooks#_committing_workflow_hooks) (`.git/hooks/pre-commit`):
 ```
 #!/bin/sh
 
@@ -15,7 +15,7 @@ if [[ -n "$changed" ]]; then
   exit $?
 fi
 ```
-4. Setup Unity's merge tool in your local repo git config (`.git/config`):
+4. Setup [Unity's merge tool](https://docs.unity3d.com/Manual/SmartMerge.html) in your local repo git config (`.git/config`):
 ```
 [merge]
 	tool = unityyamlmerge
