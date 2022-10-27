@@ -1,0 +1,16 @@
+{
+    "name": "UBT",
+    "rootNamespace": "",
+    "references": [
+        "GUID:c845c25f6f68fc148be0c0037daf228a"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
