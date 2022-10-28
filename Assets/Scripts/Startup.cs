@@ -1,18 +1,22 @@
+using UBT.SceneManagement;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-/// <summary>
-/// Initialize the game.
-/// </summary>
-public class Startup : MonoBehaviour
+namespace UBT
 {
-    [Header("Events")]
-    [SerializeField]
-    private GameSceneEventChannel _loadSceneEvent;
-
-    private void Awake()
+    /// <summary>
+    /// Initialize the game.
+    /// </summary>
+    public class Startup : MonoBehaviour
     {
-        var load = SceneManager.LoadSceneAsync((int)GameScene.PersistentManagers);
-        load.completed += (_) => _loadSceneEvent.Raise(GameScene.Intro);
+        [Header("Events")]
+        [SerializeField]
+        private GameSceneEventChannel _loadSceneEvent;
+
+        private void Awake()
+        {
+            var load = SceneManager.LoadSceneAsync((int)GameScene.PersistentManagers);
+            load.completed += (_) => _loadSceneEvent.Raise(GameScene.Intro);
+        }
     }
 }
