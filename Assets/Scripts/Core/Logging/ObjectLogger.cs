@@ -1,99 +1,136 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace UBT.Logging
 {
+    public enum Severity
+    {
+        Info,
+        Warning,
+        Error
+    }
+
     /// <summary>
-    /// Logging extensions for UnityEngine.Object. Allows for easy logging with
+    /// Logging extension for UnityEngine.Object. Allows for easy logging with
     /// the <c>this</c> keyword.
     /// <remarks>
+    /// <para>
+    /// Conditional compilation is used to remove log calls in production builds.
+    /// Log statements can remain in code without affecting performance outside
+    /// of the editor.
+    /// </para>
     /// <para>
     /// To log a message, call Log, LogWarning, or LogError from any class that
     /// derives from UnityEngine.Object.
     /// </para>
     /// <code>
     /// this.Log("Something happened");
-    /// this.Log("Took 5 damage", LC.Combat);
+    /// this.Log().Combat("Took 5 damage");
+    /// this.LogWarning().State("Entered attacking state");
     /// </code>
     /// </remarks>
     /// </summary>
     public static class ObjectLogger
     {
-        public static CustomLogger[] Loggers =
-        {
-            // This must be in the same order as the LC enum.
-            new(LC.Combat),
-            new(LC.Core),
-            new(LC.General),
-            new(LC.Player)
-        };
+        public static bool Enabled = true;
 
+        #region Public log methods
+        /// <summary>
+        /// Log a message to the console if running in the Unity Editor.
+        /// </summary>
+        /// <param name="message"></param>
         [System.Diagnostics.Conditional("UNITY_EDITOR")]
-        public static void Log(this Object obj, object message, LC category = LC.General)
+        public static void Log(this Object context, object message)
         {
-            Loggers[(int)category].Log(message, obj);
+            if (Enabled) LogGeneral(message, context, Severity.Info);
         }
 
+        /// <inheritdoc cref="Log(Object, object)"/>
         [System.Diagnostics.Conditional("UNITY_EDITOR")]
-        public static void LogWarning(this Object obj, object message, LC category = LC.General)
+        public static void LogWarning(this Object context, object message)
         {
-            Loggers[(int)category].LogWarning(message, obj);
+            if (Enabled) LogGeneral(message, context, Severity.Warning);
         }
-        public static void LogError(this Object obj, object message, LC category = LC.General)
+
+        /// <inheritdoc cref="Log(Object, object)"/>
+        [System.Diagnostics.Conditional("UNITY_EDITOR")]
+        public static void LogError(this Object context, object message)
         {
-            Loggers[(int)category].LogError(message, obj);
+            if (Enabled) LogGeneral(message, context, Severity.Error);
+        }
+
+        /// <summary>
+        /// Log a message with a category to the console if running in the Unity Editor.
+        /// </summary>
+        /// <returns>Available log categories.</returns>
+        public static Category Log(this Object context) => new(context, Severity.Info);
+        /// <inheritdoc cref="Log(Object)"/>
+        public static Category LogWarning(this Object context) => new(context, Severity.Warning);
+        /// <inheritdoc cref="Log(Object)"/>
+        public static Category LogError(this Object context) => new(context, Severity.Error);
+        #endregion
+
+        private static void LogGeneral(object message, Object context, Severity severity)
+        {
+            new Category(context, severity).General(message);
         }
     }
 
-    /// <summary>
-    /// Log Category.
-    /// </summary>
-    public enum LC
+    public struct Category
     {
-        // This must be in the same order as ObjectLogger.Loggers.
-        Combat,
-        Core,
-        General,
-        Player
-    }
+        private static Dictionary<Severity, System.Action<object, Object>> _action;
 
-    public class CustomLogger
-    {
-        public bool Enabled { get; set; }
-        public string Category { get; private set; }
+        private readonly Object _context;
+        private readonly Severity _severity;
 
-        public CustomLogger(LC category)
+        public Category(Object obj, Severity severity)
         {
-            Category = category.ToString();
-            Enabled = true;
+            _action ??= new Dictionary<Severity, System.Action<object, Object>>()
+                {
+                    { Severity.Info, Debug.Log },
+                    { Severity.Warning, Debug.LogWarning },
+                    { Severity.Error, Debug.LogError }
+                };
+
+            _context = obj;
+            _severity = severity;
         }
 
-        public void Log(object message, Object context)
+        // New log categories should be added here.
+        #region Log categories
+        public static bool CombatEnabled = true;
+        public static string CombatCategory = "Combat";
+        public void Combat(object message)
         {
-            if (Enabled)
-            {
-                ConsoleLog(Debug.Log, message, context);
-            }
+            if (CombatEnabled) Log(message, CombatCategory);
         }
 
-        public void LogWarning(object message, Object context)
+        public static bool GeneralEnabled = true;
+        public static string GeneralCategory = "General";
+        public void General(object message)
         {
-            if (Enabled)
-            {
-                ConsoleLog(Debug.LogWarning, message, context);
-            }
+            if (GeneralEnabled) Log(message, GeneralCategory);
         }
 
-        public void LogError(object message, Object context)
+        public static bool NetworkEnabled = true;
+        public static string NetworkCategory = "Network";
+        public void Network(object message)
         {
-            if (Enabled)
-            {
-                ConsoleLog(Debug.LogError, message, context);
-            }
+            if (NetworkEnabled) Log(message, NetworkCategory);
         }
 
-        private void ConsoleLog(System.Action<object, Object> action, object message, Object context)
+        public static bool StateEnabled = true;
+        public static string StateCategory = "State";
+        public void State(object message)
         {
-            action($"[{Category}] {context.name}: {message}", context);
+            if (StateEnabled) Log(message, StateCategory);
+        }
+        #endregion
+
+        [System.Diagnostics.Conditional("UNITY_EDITOR")]
+        private void Log(object message, string category)
+        {
+            _action[_severity].Invoke($"[{category}] {_context.name}: {message}", _context);
         }
     }
 }
