@@ -1,3 +1,10 @@
+/// <summary>
+/// Defines properties and methods for a state.
+/// </summary>
+/// <remarks>
+/// Represents the state of an individual object and executes code while
+/// the object remains in the state.
+/// </remarks>
 public interface IState
 {
     /// <summary>
